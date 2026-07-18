@@ -267,7 +267,7 @@ export default function Home() {
             target="_blank"
             rel="noopener noreferrer"
           >
-            @leosbarbersware &nearr;
+            @leosbarbersware ↗
           </a>
         </div>
         <div
@@ -414,7 +414,7 @@ export default function Home() {
               target="_blank"
               rel="noopener noreferrer"
             >
-              Get Directions &nearr;
+              Get Directions ↗
             </a>
 
             <HoursTable />
