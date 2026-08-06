@@ -14,3 +14,7 @@ npm-debug.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+.shots/
+
+# local screenshots / scratch
+.playwright-mcp/

@@ -1,486 +1,574 @@
 import Image from "next/image";
 import RevealObserver from "@/components/RevealObserver";
 import HoursTable from "@/components/HoursTable";
+import SiteNav from "@/components/SiteNav";
+import Icon, { Stars } from "@/components/Icon";
+import {
+  ADDRESS,
+  BOOKSY,
+  DIRECTIONS,
+  INSTAGRAM,
+  INSTAGRAM_HANDLE,
+  PHONE,
+  PHONE_DISPLAY,
+} from "@/lib/shop";
 
-const BOOKSY = "https://leosbarbers111.booksy.com";
-const PHONE = "tel:+441920633197";
-const INSTAGRAM = "https://www.instagram.com/leosbarbersware/";
-const DIRECTIONS =
-  "https://www.google.com/maps/dir/?api=1&destination=Leo%27s+Barbers%2C+111+Cromwell+Rd%2C+Ware+SG12+7LD";
+/* -------------------------------------------------------------------------
+   Content. Everything a non-designer would want to change lives right here.
+   ------------------------------------------------------------------------- */
 
-const cuts = [
-  { name: "Haircut & style", price: "£26" },
-  { name: "Skin fade / taper", price: "£26" },
-  { name: "Haircut & beard trim", price: "£36" },
-  { name: "Skin fade / taper & beard", price: "£36" },
-  { name: "Buzz cut — 1 grade", price: "£15" },
-  { name: "Buzz cut — 2 grades", price: "£20" },
-];
-
-const beards = [
-  { name: "Beard trim & shape up", price: "£15" },
-  { name: "Beard shave only", price: "£5" },
-];
-
-const juniorsSeniors = [
-  { name: "Kids haircut & style", note: "(under 16)", price: "£20" },
-  { name: "Kids skin fade", note: "(under 16)", price: "£20" },
-  { name: "OAP haircut", price: "£18" },
-];
-
-const gallery = [
-  { src: "/images/cut-01.jpg", w: 912, h: 1120, alt: "Textured crop with mid skin fade and shaped beard" },
-  { src: "/images/cut-02.jpg", w: 912, h: 1136, alt: "Clean skin fade with textured top" },
-  { src: "/images/cut-03.jpg", w: 877, h: 1168, alt: "French crop with high skin fade" },
-  { src: "/images/cut-04.jpg", w: 736, h: 903, alt: "Sharp taper fade with styled top" },
-  { src: "/images/cut-05.jpg", w: 928, h: 1120, alt: "Skin fade with textured fringe" },
-];
-
-const reviews = [
+/* The eight bookable services, with the prices and appointment lengths
+   exactly as listed on the shop's Booksy page. */
+const PRICE_GROUPS = [
   {
-    quote: "“Good barbers don’t rush — takes their time and lets you leave looking good 💙👊🏻”",
-    name: "Callum",
-    service: "Kids haircut & style",
+    title: "Cuts",
+    items: [
+      { name: "Haircut & style", note: "30 min", price: "£26" },
+      { name: "Haircut & beard trim", note: "45 min", price: "£36" },
+      { name: "Buzz cut, one grade", note: "15 min", price: "£15" },
+      { name: "Buzz cut, two grades", note: "20 min", price: "£20" },
+    ],
   },
   {
-    quote: "“Great trim 💪🏼 really happy with it. Thanks.”",
-    name: "Tommy",
-    service: "Haircut & beard trim",
-    reply: "“Thank you Tommy, appreciate it!”",
+    title: "Beards",
+    items: [
+      { name: "Beard trim & shape up", note: "20 min", price: "£15" },
+      { name: "Beard shave only", note: "5 min, without shape up", price: "£5" },
+    ],
   },
   {
-    quote: "“Lovely people and great haircut, will definitely come back!”",
-    name: "Charlie",
+    title: "Juniors & seniors",
+    items: [
+      { name: "Kids haircut & style", note: "Under 16, 30 min", price: "£20" },
+      { name: "OAP haircut", note: "25 min", price: "£18" },
+    ],
+  },
+];
+
+/* Verified amenities, as listed on the shop's Booksy profile. */
+const AMENITIES = [
+  "Parking space",
+  "Card payments",
+  "Step-free access",
+  "Child friendly",
+  "Pets allowed",
+];
+
+const GALLERY = [
+  {
+    src: "/img/cut-01.jpg",
+    alt: "Textured crop with a forward fringe and a mid skin fade, finished at Leo's Barbers",
+  },
+  {
+    src: "/img/cut-02.jpg",
+    alt: "Loose curls left long on top over a clean mid fade",
+  },
+  {
+    src: "/img/cut-03.jpg",
+    alt: "Dark textured quiff with a mid drop fade and a shaped, tapered beard",
+  },
+  {
+    src: "/img/cut-04.jpg",
+    alt: "Bleached blonde curly crop over a high skin fade",
+  },
+  {
+    src: "/img/cut-05.jpg",
+    alt: "Tight natural curls kept full on top with a mid skin fade through the sides",
+  },
+];
+
+/* Names and spec lines below are exactly what is printed on the packaging. */
+const RANGE = [
+  {
+    src: "/img/product-tins.jpg",
+    alt: "Two open LEO'S tins, Deluxe Pomade in amber and Grooming Clay in pale matte",
+    name: "Deluxe Pomade & Grooming Clay",
+    spec: "Classic gloss · Matte finish",
+  },
+  {
+    src: "/img/product-dust.jpg",
+    alt: "LEO'S Volumising Dust in its matte black carton",
+    name: "Volumising Dust",
+    spec: "20g",
+  },
+  {
+    src: "/img/product-beard.jpg",
+    alt: "LEO'S Beard Moisturiser in a matte black pump bottle",
+    name: "Beard Moisturiser",
+    spec: "30ml",
+  },
+  {
+    src: "/img/product-salt.jpg",
+    alt: "LEO'S Salt Spray in a matte black trigger bottle",
+    name: "Salt Spray",
+    spec: "250ml",
+  },
+];
+
+/* Verified Booksy reviews from confirmed clients, quoted as written. */
+const REVIEWS = [
+  {
+    quote: "Great work K. Exactly what I asked for.",
+    name: "Jeremy",
     service: "Haircut & style",
+    date: "Aug 2026",
   },
   {
-    quote: "“Best around. Top job once again.”",
+    quote: "good barbers dont rush takes there time and lets u leave looking good",
+    name: "callum",
+    service: "Kids haircut & style",
+    date: "Jul 2026",
+  },
+  {
+    quote: "Best around. Top job once again",
     name: "Reece",
     service: "Haircut & beard",
-    reply: "“Thank you Reece 🤛🏽😎”",
+    date: "May 2026",
   },
   {
-    quote: "“Amazing haircut, very friendly, very professional.”",
-    name: "Charmaine",
-    service: "Kids haircut & style",
+    quote: "Lovely People and Great Haircut, will definitely come back !",
+    name: "Charlie",
+    service: "Haircut & style",
+    date: "May 2026",
   },
   {
-    quote: "“The two brothers that run the place are sound guys.”",
-    name: "Blane",
-    service: "Google review",
+    quote: "Great trim really happy with it. Thanks",
+    name: "Tommy",
+    service: "Haircut & beard trim",
+    date: "Jun 2026",
+  },
+  {
+    quote: "Great guy great haircut",
+    name: "Jono",
+    service: "After hours haircut",
+    date: "Jun 2026",
   },
 ];
-
-const marqueeItems = [
-  "SKIN FADES",
-  "TAPERS",
-  "BEARD WORK",
-  "KIDS CUTS",
-  "BUZZ CUTS",
-  "OAP CUTS",
-  "BOOK ON BOOKSY",
-];
-
-function PriceList({
-  items,
-}: {
-  items: { name: string; note?: string; price: string }[];
-}) {
-  return (
-    <dl className="menu__list">
-      {items.map((item) => (
-        <div className="menu__row" key={item.name}>
-          <dt>
-            {item.name} {item.note && <small>{item.note}</small>}
-          </dt>
-          <dd>{item.price}</dd>
-        </div>
-      ))}
-    </dl>
-  );
-}
 
 export default function Home() {
   return (
     <>
       <RevealObserver />
-      <a className="skip-link" href="#menu">
-        Skip to content
+      <a className="skip" href="#prices">
+        Skip to prices
       </a>
 
-      {/* ============ NAV ============ */}
-      <header className="nav" id="top">
-        <a className="nav__brand" href="#top" aria-label="Leo's Barbers — home">
-          <span className="nav__badge" aria-hidden="true">
-            L
-          </span>
-          <span className="nav__name">
-            LEO&rsquo;S<em>BARBERS</em>
-          </span>
-        </a>
-        <nav className="nav__links" aria-label="Main">
-          <a href="#menu">The Menu</a>
-          <a href="#work">The Work</a>
-          <a href="#shop">The Shop</a>
-          <a href="#reviews">Reviews</a>
-          <a href="#find-us">Find Us</a>
-        </nav>
-        <div className="nav__cta">
-          <a className="nav__phone" href={PHONE}>
-            01920 633197
-          </a>
-          <a className="btn btn--solid" href={BOOKSY} target="_blank" rel="noopener noreferrer">
-            Book Now
-          </a>
-        </div>
-      </header>
+      <SiteNav />
 
-      {/* ============ HERO ============ */}
-      <section className="hero">
-        <div className="hero__lights" aria-hidden="true">
-          <span className="bar bar--1" />
-          <span className="bar bar--2" />
-          <span className="bar bar--3" />
-          <span className="bar bar--4" />
-          <span className="bar bar--5" />
-          <span className="bar bar--6" />
-        </div>
+      <main id="top">
+        {/* ============================ HERO ============================ */}
+        <section className="hero">
+          <div className="wrap hero__grid">
+            <div>
+              <h1 className="display reveal">
+                Two brothers.
+                <br />
+                One standard.
+              </h1>
+              <p className="lede reveal" data-delay="1">
+                A barbershop on Cromwell Road in Ware, open since 2022. Skin fades,
+                tapers and beard work by Ed and K. Modern styles, cut carefully,
+                priced plainly.
+              </p>
 
-        <div className="hero__inner">
-          <div className="hero__copy">
-            <p className="eyebrow reveal">
-              Ware &middot; Hertfordshire &mdash; 111 Cromwell Road
-            </p>
-            <h1 className="hero__title">
-              <span className="hero__line reveal">LEO&rsquo;S</span>
-              <span className="hero__line hero__line--outline reveal">
-                BARBERS
-              </span>
-            </h1>
-            <p className="hero__sub reveal">
-              Sharp fades, proper beard work, and a chair you&rsquo;re never
-              rushed out of. Run by two brothers who take their time &mdash; and
-              it shows.
-            </p>
-            <div className="hero__actions reveal">
+              <div className="hero__actions reveal" data-delay="2" id="hero-cta">
+                <a
+                  className="btn btn--ink"
+                  href={BOOKSY}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Icon name="calendar" size={18} />
+                  Book on Booksy
+                </a>
+                <a className="btn btn--line" href={PHONE}>
+                  <Icon name="phone" size={18} />
+                  {PHONE_DISPLAY}
+                </a>
+              </div>
+
+              <div className="hero__meta reveal" data-delay="3">
+                <span className="rating">
+                  <Stars label="Rated five out of five" />
+                  <span>
+                    <b>5.0</b> from 182 reviews on Booksy
+                  </span>
+                </span>
+                <span className="rating">
+                  <Icon name="pin" size={17} />
+                  <span>
+                    {ADDRESS.line1}, {ADDRESS.postcode}
+                  </span>
+                </span>
+              </div>
+            </div>
+
+            <figure className="hero__figure reveal reveal--wipe" data-delay="1">
+              <Image
+                src="/img/shop-01.jpg"
+                alt="The shop floor at Leo's Barbers, with two black barber chairs on polished concrete, white subway tile and angular LED light bars overhead"
+                width={1460}
+                height={1800}
+                priority
+                sizes="(max-width: 880px) 100vw, 46vw"
+              />
+            </figure>
+          </div>
+        </section>
+
+        {/* =========================== PRICES =========================== */}
+        <section className="section section--tint" id="prices">
+          <div className="wrap">
+            <div className="section__head">
+              <h2 className="h2">Prices</h2>
+              <p>
+                Every service the shop books, what it costs and how long to
+                allow. Pay in the shop, cards accepted.
+              </p>
+            </div>
+
+            <div className="prices__grid reveal">
+              <div>
+                <div className="pgroup">
+                  <h3>{PRICE_GROUPS[0].title}</h3>
+                  <dl>
+                    {PRICE_GROUPS[0].items.map((item) => (
+                      <div className="prow" key={item.name + (item.note ?? "")}>
+                        <dt>
+                          {item.name}
+                          {item.note && <span>{item.note}</span>}
+                        </dt>
+                        <dd>{item.price}</dd>
+                      </div>
+                    ))}
+                  </dl>
+                </div>
+              </div>
+
+              <div>
+                {PRICE_GROUPS.slice(1).map((group) => (
+                  <div className="pgroup" key={group.title}>
+                    <h3>{group.title}</h3>
+                    <dl>
+                      {group.items.map((item) => (
+                        <div className="prow" key={item.name + (item.note ?? "")}>
+                          <dt>
+                            {item.name}
+                            {item.note && <span>{item.note}</span>}
+                          </dt>
+                          <dd>{item.price}</dd>
+                        </div>
+                      ))}
+                    </dl>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="prices__foot reveal">
+              <p>
+                Caught out after closing? An after-hours haircut can be arranged.
+                Give the shop a ring on{" "}
+                <a className="tlink" href={PHONE}>
+                  {PHONE_DISPLAY}
+                </a>
+                .
+              </p>
               <a
-                className="btn btn--solid btn--lg"
+                className="btn btn--ink"
                 href={BOOKSY}
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                Book on Booksy
+                <Icon name="calendar" size={18} />
+                Check availability
               </a>
-              <a className="btn btn--ghost btn--lg" href={PHONE}>
-                Call the Shop
-              </a>
-            </div>
-            <div className="hero__rating reveal">
-              <span className="stars" aria-hidden="true">
-                ★★★★★
-              </span>
-              <span className="hero__rating-text">
-                <strong>5.0</strong> on Google &nbsp;&middot;&nbsp;{" "}
-                <strong>5.0</strong> on Booksy &mdash; 181 reviews
-              </span>
             </div>
           </div>
-          <figure className="hero__photo reveal">
-            <Image
-              src="/images/shop-interior.jpg"
-              alt="Inside Leo's Barbers — black barber chairs, white subway tiles and angular ceiling lights"
-              width={912}
-              height={513}
-              priority
-            />
-            <figcaption className="hero__photo-tag">
-              THE SHOP FLOOR &mdash; CROMWELL RD
-            </figcaption>
-          </figure>
-        </div>
-      </section>
+        </section>
 
-      {/* ============ MARQUEE ============ */}
-      <div className="marquee" aria-hidden="true">
-        <div className="marquee__track">
-          {[0, 1].map((pass) => (
-            <span className="marquee__group" key={pass}>
-              {marqueeItems.map((item) => (
-                <span className="marquee__item" key={item}>
-                  <span>{item}</span>
-                  <i>✂</i>
-                </span>
+        {/* ============================ WORK ============================ */}
+        <section className="section" id="work">
+          <div className="wrap">
+            <div className="section__head">
+              <h2 className="h2">The work</h2>
+              <a
+                className="tlink"
+                href={INSTAGRAM}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Icon name="instagram" size={18} />
+                {INSTAGRAM_HANDLE}
+                <Icon name="arrow-up-right" size={16} />
+              </a>
+            </div>
+
+            <div className="work__grid">
+              {GALLERY.map((photo, i) => (
+                <figure
+                  className="shot reveal reveal--wipe"
+                  key={photo.src}
+                  data-delay={String(Math.min(i, 4))}
+                >
+                  <Image
+                    src={photo.src}
+                    alt={photo.alt}
+                    width={1160}
+                    height={1450}
+                    loading="lazy"
+                    sizes="(max-width: 560px) 46vw, (max-width: 1080px) 30vw, 220px"
+                  />
+                </figure>
               ))}
-            </span>
-          ))}
-        </div>
-      </div>
-
-      {/* ============ MENU / PRICES ============ */}
-      <section className="section menu" id="menu">
-        <div className="section__head">
-          <p className="eyebrow">01 &mdash; The Menu</p>
-          <h2 className="section__title">
-            CUTS &amp;
-            <br />
-            <span className="outline">PRICES</span>
-          </h2>
-        </div>
-
-        <div className="menu__grid reveal">
-          <div className="menu__col">
-            <h3 className="menu__cat">Cuts</h3>
-            <PriceList items={cuts} />
+            </div>
           </div>
-          <div className="menu__col">
-            <h3 className="menu__cat">Beards</h3>
-            <PriceList items={beards} />
-            <h3 className="menu__cat">Juniors &amp; Seniors</h3>
-            <PriceList items={juniorsSeniors} />
-          </div>
-        </div>
+        </section>
 
-        <p className="menu__note reveal">
-          Caught out after closing? <strong>After-hours cuts</strong> are
-          available &mdash; call the shop on{" "}
-          <a href={PHONE}>01920&nbsp;633197</a>. Live availability and booking
-          on{" "}
-          <a href={BOOKSY} target="_blank" rel="noopener noreferrer">
-            Booksy
-          </a>
-          .
-        </p>
-      </section>
-
-      {/* ============ GALLERY ============ */}
-      <section className="section work" id="work">
-        <div className="section__head">
-          <p className="eyebrow">02 &mdash; The Work</p>
-          <h2 className="section__title">
-            FRESH OFF
-            <br />
-            <span className="outline">THE CHAIR</span>
-          </h2>
-          <a
-            className="work__ig"
-            href={INSTAGRAM}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            @leosbarbersware ↗
-          </a>
-        </div>
-        <div
-          className="work__strip"
-          tabIndex={0}
-          aria-label="Gallery of recent haircuts — scroll horizontally"
-        >
-          {gallery.map((photo) => (
-            <figure className="work__card" key={photo.src}>
+        {/* ============================ ABOUT =========================== */}
+        <section className="section section--tint" id="about">
+          <div className="wrap about__grid">
+            <figure className="about__figure reveal reveal--wipe">
               <Image
-                src={photo.src}
-                alt={photo.alt}
-                width={photo.w}
-                height={photo.h}
+                src="/img/shop-02.jpg"
+                alt="Leo's Barbers seen from the door, showing the barber chairs, the timber shelf along the tiled mirror wall and the LEO'S roundel on the glass"
+                width={1433}
+                height={1800}
                 loading="lazy"
-                sizes="(max-width: 760px) 72vw, 340px"
+                sizes="(max-width: 880px) 100vw, 42vw"
               />
             </figure>
-          ))}
-        </div>
-      </section>
 
-      {/* ============ THE SHOP ============ */}
-      <section className="section shop" id="shop">
-        <div className="shop__grid">
-          <figure className="shop__photo reveal">
-            <Image
-              src="/images/shop-detail.jpg"
-              alt="Black lion statue and Leo's own grooming products under the shop's angular lights"
-              width={1172}
-              height={2144}
-              loading="lazy"
-              sizes="(max-width: 900px) 100vw, 40vw"
-            />
-          </figure>
-          <div className="shop__copy">
-            <p className="eyebrow">03 &mdash; The Shop</p>
-            <h2 className="section__title">
-              TWO BROTHERS.
-              <br />
-              <span className="outline">ONE STANDARD.</span>
-            </h2>
-            <p className="shop__text reveal">
-              Leo&rsquo;s is run by brothers <strong>Ed Leo</strong> and{" "}
-              <strong>K Leo</strong> &mdash; matte black walls, white tiles, and
-              no clock-watching. Every cut gets the time it needs, whether
-              it&rsquo;s a schoolboy&rsquo;s first fade or a regular&rsquo;s
-              weekly tidy-up.
-            </p>
-            <p className="shop__text reveal">
-              The shop stocks its own <strong>LEO&rsquo;S</strong> grooming
-              range &mdash; clays, salt sprays and beard care &mdash; so the
-              finish you leave with is one you can keep.
-            </p>
-            <ul className="shop__amenities reveal" aria-label="Amenities">
-              <li>Parking nearby</li>
-              <li>Cards accepted</li>
-              <li>Wheelchair accessible</li>
-              <li>Child-friendly</li>
-              <li>Pets welcome</li>
-            </ul>
-            <div className="shop__barbers reveal">
-              <div className="barber-card">
-                <span className="barber-card__badge">ED</span>
-                <div>
-                  <strong>Ed Leo</strong>
-                  <span>Barber &amp; co-owner</span>
-                </div>
-              </div>
-              <div className="barber-card">
-                <span className="barber-card__badge">K</span>
-                <div>
-                  <strong>K Leo</strong>
-                  <span>Barber &amp; co-owner</span>
-                </div>
+            <div>
+              <h2 className="h2 reveal">About us</h2>
+              <p className="prose reveal" data-delay="1" style={{ marginTop: "1.5rem" }}>
+                Leo&rsquo;s Barbers was opened in April 2022, run by two brothers,{" "}
+                <strong>Ed &amp; K</strong>. They began their barbering journey in
+                Shoreditch, London at the Hair for Men academy, learning alongside
+                highly skilled barbers who taught them the fundamentals of the trade.
+              </p>
+              <p className="prose reveal" data-delay="2">
+                Since then they have set a high standard, kept up with modern styles
+                and delivered quality haircuts.
+              </p>
+
+              <div className="brothers reveal" data-delay="3">
+                <span>
+                  <b>Ed</b> Barber &amp; co-owner
+                </span>
+                <span>
+                  <b>K</b> Barber &amp; co-owner
+                </span>
               </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* ============ REVIEWS ============ */}
-      <section className="section reviews" id="reviews">
-        <div className="reviews__head">
-          <p className="eyebrow eyebrow--dark">04 &mdash; The Word</p>
-          <div className="reviews__score">
-            <span className="reviews__number">5.0</span>
-            <div className="reviews__meta">
-              <span className="stars stars--dark" aria-label="Five stars">
-                ★★★★★
-              </span>
-              <span>
-                181 verified reviews on Booksy
-                <br />
-                5.0 on Google
-              </span>
+        {/* ============================ RANGE =========================== */}
+        <section className="section" id="range">
+          <div className="wrap">
+            <div className="section__head">
+              <h2 className="h2">The range</h2>
+              <p>
+                Leo&rsquo;s own grooming line, made to hold the finish you leave
+                with.
+              </p>
+            </div>
+
+            <div className="range__grid">
+              {RANGE.map((product, i) => (
+                <article className="product" key={product.name}>
+                  <div
+                    className="product__shot reveal reveal--wipe"
+                    data-delay={String(Math.min(i, 4))}
+                  >
+                    <Image
+                      src={product.src}
+                      alt={product.alt}
+                      width={1400}
+                      height={1400}
+                      loading="lazy"
+                      sizes="(max-width: 560px) 46vw, (max-width: 1080px) 30vw, 280px"
+                    />
+                  </div>
+                  <div className="plate">
+                    <h3>{product.name}</h3>
+                    <div className="plate__rule" />
+                    <p>{product.spec}</p>
+                  </div>
+                </article>
+              ))}
+            </div>
+
+            <p className="range__note reveal">
+              Available in the shop. Ask Ed or K on your next visit.
+            </p>
+          </div>
+        </section>
+
+        {/* =========================== REVIEWS ========================== */}
+        <section className="section section--tint" id="reviews">
+          <div className="wrap">
+            <div className="section__head">
+              <h2 className="h2">What people say</h2>
+              <div className="reviews__score">
+                <b>5.0</b>
+                <div>
+                  <Stars label="Rated five out of five" />
+                  <small>182 reviews on Booksy, every one of them five stars</small>
+                </div>
+              </div>
+            </div>
+
+            <div className="reviews__grid">
+              {REVIEWS.map((review, i) => (
+                <blockquote
+                  className="review reveal"
+                  key={review.name + review.service}
+                  data-delay={String(Math.min(i, 4))}
+                >
+                  <p>&ldquo;{review.quote}&rdquo;</p>
+                  <footer>
+                    <cite>{review.name}</cite>
+                    <span>
+                      {review.service}
+                      <br />
+                      {review.date}
+                    </span>
+                  </footer>
+                </blockquote>
+              ))}
             </div>
           </div>
-        </div>
+        </section>
 
-        <div className="reviews__grid">
-          {reviews.map((review) => (
-            <blockquote className="review reveal" key={review.name + review.service}>
-              <p>{review.quote}</p>
-              <footer>
-                <cite>{review.name}</cite>
-                <span>{review.service}</span>
-              </footer>
-              {review.reply && (
-                <p className="review__reply">
-                  — {review.reply} <em>Leo&rsquo;s</em>
-                </p>
-              )}
-            </blockquote>
-          ))}
-        </div>
-      </section>
+        {/* =========================== FIND US ========================== */}
+        <section className="section" id="find">
+          <div className="wrap">
+            <div className="section__head">
+              <h2 className="h2">Find us</h2>
+            </div>
 
-      {/* ============ FIND US ============ */}
-      <section className="section find" id="find-us">
-        <div className="section__head">
-          <p className="eyebrow">05 &mdash; Find Us</p>
-          <h2 className="section__title">
-            CROMWELL
-            <br />
-            <span className="outline">ROAD</span>
-          </h2>
-        </div>
+            <div className="find__grid">
+              <div className="reveal">
+                <address className="address">
+                  <b>Leo&rsquo;s Barbers</b>
+                  <br />
+                  <span>
+                    {ADDRESS.line1}
+                    <br />
+                    {ADDRESS.town}
+                    <br />
+                    {ADDRESS.postcode}
+                  </span>
+                </address>
 
-        <div className="find__grid">
-          <div className="find__info reveal">
-            <address className="find__address">
-              <strong>Leo&rsquo;s Barbers</strong>
-              <br />
-              111 Cromwell Road
-              <br />
-              Ware, Hertfordshire
-              <br />
-              SG12 7LD
-            </address>
+                <div className="find__actions">
+                  <a
+                    className="btn btn--line btn--sm"
+                    href={DIRECTIONS}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <Icon name="pin" size={17} />
+                    Directions
+                  </a>
+                  <a className="btn btn--line btn--sm" href={PHONE}>
+                    <Icon name="phone" size={17} />
+                    {PHONE_DISPLAY}
+                  </a>
+                </div>
+
+                <HoursTable />
+
+                <ul className="amenities" aria-label="Amenities">
+                  {AMENITIES.map((a) => (
+                    <li key={a}>{a}</li>
+                  ))}
+                </ul>
+              </div>
+
+              <div className="map reveal">
+                <iframe
+                  title="Map showing Leo's Barbers, 111 Cromwell Road, Ware SG12 7LD"
+                  src="https://maps.google.com/maps?q=Leo%27s%20Barbers%2C%20111%20Cromwell%20Rd%2C%20Ware%20SG12%207LD&z=15&output=embed"
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                />
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      {/* =========================== CLOSING ========================== */}
+      <section className="close">
+        <div className="wrap close__inner">
+          <div>
+            <h2>The chair&rsquo;s free.</h2>
+            <p>Live availability is on Booksy, or ring the shop and we&rsquo;ll sort you out.</p>
+          </div>
+          <div className="close__actions">
             <a
-              className="btn btn--ghost"
-              href={DIRECTIONS}
+              className="btn btn--ink"
+              href={BOOKSY}
               target="_blank"
               rel="noopener noreferrer"
             >
-              Get Directions ↗
-            </a>
-
-            <HoursTable />
-            <p className="find__note">
-              After-hours cuts by arrangement &mdash; call the shop.
-            </p>
-          </div>
-
-          <div className="find__map reveal">
-            <iframe
-              title="Map — Leo's Barbers, 111 Cromwell Road, Ware"
-              src="https://maps.google.com/maps?q=Leo%27s%20Barbers%2C%20111%20Cromwell%20Rd%2C%20Ware%20SG12%207LD&z=15&output=embed"
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-              allowFullScreen
-            />
-          </div>
-        </div>
-      </section>
-
-      {/* ============ BOOK BANNER ============ */}
-      <section className="banner">
-        <div className="banner__lights" aria-hidden="true">
-          <span className="bar bar--a" />
-          <span className="bar bar--b" />
-        </div>
-        <h2 className="banner__title">
-          CHAIR&rsquo;S <span className="outline">WAITING.</span>
-        </h2>
-        <div className="banner__actions">
-          <a
-            className="btn btn--solid btn--lg"
-            href={BOOKSY}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Book on Booksy
-          </a>
-          <a className="btn btn--ghost btn--lg" href={PHONE}>
-            01920 633197
-          </a>
-        </div>
-      </section>
-
-      {/* ============ FOOTER ============ */}
-      <footer className="footer">
-        <p className="footer__wordmark" aria-hidden="true">
-          LEO&rsquo;S
-        </p>
-        <div className="footer__row">
-          <div className="footer__col">
-            <strong>Leo&rsquo;s Barbers</strong>
-            111 Cromwell Road, Ware SG12 7LD
-          </div>
-          <div className="footer__col">
-            <a href={PHONE}>01920 633197</a>
-            <a href={INSTAGRAM} target="_blank" rel="noopener noreferrer">
-              Instagram — @leosbarbersware
-            </a>
-            <a href={BOOKSY} target="_blank" rel="noopener noreferrer">
+              <Icon name="calendar" size={18} />
               Book on Booksy
             </a>
+            <a className="btn btn--line" href={PHONE}>
+              <Icon name="phone" size={18} />
+              {PHONE_DISPLAY}
+            </a>
           </div>
-          <div className="footer__col footer__col--right">
-            <span>Rated 5.0 ★ — 181 reviews</span>
+        </div>
+      </section>
+
+      {/* =========================== FOOTER =========================== */}
+      <footer className="footer">
+        <div className="wrap">
+          <div className="footer__grid">
+            <div className="footer__col">
+              <span className="wordmark">
+                <span className="wordmark__name">LEO&rsquo;S</span>
+                <span className="wordmark__rule" aria-hidden="true" />
+                <span className="wordmark__sub">BARBERS &middot; WARE</span>
+              </span>
+            </div>
+
+            <div className="footer__col">
+              <span className="label">Visit</span>
+              {ADDRESS.line1}
+              <br />
+              {ADDRESS.town} {ADDRESS.postcode}
+            </div>
+
+            <div className="footer__col">
+              <span className="label">Contact</span>
+              <a href={PHONE}>
+                <Icon name="phone" size={16} />
+                {PHONE_DISPLAY}
+              </a>
+              <a href={INSTAGRAM} target="_blank" rel="noopener noreferrer">
+                <Icon name="instagram" size={16} />
+                {INSTAGRAM_HANDLE}
+              </a>
+            </div>
+
+            <div className="footer__col">
+              <span className="label">Book</span>
+              <a href={BOOKSY} target="_blank" rel="noopener noreferrer">
+                Booksy
+                <Icon name="arrow-up-right" size={15} />
+              </a>
+            </div>
+          </div>
+
+          <div className="footer__legal">
             <span>&copy; {new Date().getFullYear()} Leo&rsquo;s Barbers</span>
+            <span>Rated 5.0 from 182 reviews on Booksy</span>
           </div>
         </div>
       </footer>
