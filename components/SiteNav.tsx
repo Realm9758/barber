@@ -41,13 +41,23 @@ export default function SiteNav() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // While the sheet is open: lock the page, trap Escape, and send focus into it.
+  // While the sheet is open: lock the page, make everything behind it inert so
+  // keyboard and screen-reader users cannot tab into hidden content, trap
+  // Escape, and send focus into the sheet.
   useEffect(() => {
     if (!open) return;
 
     const { style } = document.body;
-    const prev = style.overflow;
+    const prevOverflow = style.overflow;
     style.overflow = "hidden";
+
+    const behind = Array.from(
+      document.querySelectorAll<HTMLElement>("main, footer, .close, .bookbar")
+    );
+    behind.forEach((el) => {
+      el.inert = true;
+      el.setAttribute("aria-hidden", "true");
+    });
 
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") setOpen(false);
@@ -57,7 +67,11 @@ export default function SiteNav() {
     panelRef.current?.querySelector<HTMLElement>("a, button")?.focus();
 
     return () => {
-      style.overflow = prev;
+      style.overflow = prevOverflow;
+      behind.forEach((el) => {
+        el.inert = false;
+        el.removeAttribute("aria-hidden");
+      });
       document.removeEventListener("keydown", onKey);
       toggleRef.current?.focus();
     };

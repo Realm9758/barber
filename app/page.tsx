@@ -15,10 +15,10 @@ import {
 
 /* -------------------------------------------------------------------------
    Content. Everything a non-designer would want to change lives right here.
+   Prices, durations, reviews and amenities were checked against the shop's
+   live Booksy page on 2026-08-06.
    ------------------------------------------------------------------------- */
 
-/* The eight bookable services, with the prices and appointment lengths
-   exactly as listed on the shop's Booksy page. */
 const PRICE_GROUPS = [
   {
     title: "Cuts",
@@ -45,11 +45,11 @@ const PRICE_GROUPS = [
   },
 ];
 
-/* Verified amenities, as listed on the shop's Booksy profile. */
+/* Amenity wording is Booksy's own, not paraphrased. */
 const AMENITIES = [
   "Parking space",
-  "Card payments",
-  "Step-free access",
+  "Credit cards accepted",
+  "Accessible for people with disabilities",
   "Child friendly",
   "Pets allowed",
 ];
@@ -145,6 +145,25 @@ const REVIEWS = [
   },
 ];
 
+/** The signature component: a name, a rule, and a spec line, as printed on the tins. */
+function Plate({
+  name,
+  spec,
+  as: Tag = "div",
+}: {
+  name: React.ReactNode;
+  spec: React.ReactNode;
+  as?: "div" | "h3" | "figcaption" | "footer";
+}) {
+  return (
+    <Tag className="plate">
+      <span className="plate__name">{name}</span>
+      <span className="plate__rule" aria-hidden="true" />
+      <span className="plate__spec">{spec}</span>
+    </Tag>
+  );
+}
+
 export default function Home() {
   return (
     <>
@@ -160,18 +179,18 @@ export default function Home() {
         <section className="hero">
           <div className="wrap hero__grid">
             <div>
-              <h1 className="display reveal">
+              <h1 className="display">
                 Two brothers.
                 <br />
                 One standard.
               </h1>
-              <p className="lede reveal" data-delay="1">
+              <p className="lede">
                 A barbershop on Cromwell Road in Ware, open since 2022. Skin fades,
                 tapers and beard work by Ed and K. Modern styles, cut carefully,
                 priced plainly.
               </p>
 
-              <div className="hero__actions reveal" data-delay="2" id="hero-cta">
+              <div className="hero__actions" id="hero-cta">
                 <a
                   className="btn btn--ink"
                   href={BOOKSY}
@@ -187,7 +206,7 @@ export default function Home() {
                 </a>
               </div>
 
-              <div className="hero__meta reveal" data-delay="3">
+              <div className="hero__meta">
                 <span className="rating">
                   <Stars label="Rated five out of five" />
                   <span>
@@ -203,7 +222,7 @@ export default function Home() {
               </div>
             </div>
 
-            <figure className="hero__figure reveal reveal--wipe" data-delay="1">
+            <figure className="hero__figure reveal reveal--wipe">
               <Image
                 src="/img/shop-01.jpg"
                 alt="The shop floor at Leo's Barbers, with two black barber chairs on polished concrete, white subway tile and angular LED light bars overhead"
@@ -211,6 +230,11 @@ export default function Home() {
                 height={1800}
                 priority
                 sizes="(max-width: 880px) 100vw, 46vw"
+              />
+              <Plate
+                as="figcaption"
+                name="The shop floor"
+                spec="Est. April 2022 · Two chairs"
               />
             </figure>
           </div>
@@ -227,16 +251,16 @@ export default function Home() {
               </p>
             </div>
 
-            <div className="prices__grid reveal">
+            <div className="prices__grid">
               <div>
                 <div className="pgroup">
-                  <h3>{PRICE_GROUPS[0].title}</h3>
+                  <Plate as="h3" name={PRICE_GROUPS[0].title} spec="4 services" />
                   <dl>
                     {PRICE_GROUPS[0].items.map((item) => (
-                      <div className="prow" key={item.name + (item.note ?? "")}>
+                      <div className="prow" key={item.name + item.note}>
                         <dt>
                           {item.name}
-                          {item.note && <span>{item.note}</span>}
+                          <span>{item.note}</span>
                         </dt>
                         <dd>{item.price}</dd>
                       </div>
@@ -248,13 +272,17 @@ export default function Home() {
               <div>
                 {PRICE_GROUPS.slice(1).map((group) => (
                   <div className="pgroup" key={group.title}>
-                    <h3>{group.title}</h3>
+                    <Plate
+                      as="h3"
+                      name={group.title}
+                      spec={`${group.items.length} services`}
+                    />
                     <dl>
                       {group.items.map((item) => (
-                        <div className="prow" key={item.name + (item.note ?? "")}>
+                        <div className="prow" key={item.name + item.note}>
                           <dt>
                             {item.name}
-                            {item.note && <span>{item.note}</span>}
+                            <span>{item.note}</span>
                           </dt>
                           <dd>{item.price}</dd>
                         </div>
@@ -265,7 +293,7 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="prices__foot reveal">
+            <div className="prices__foot">
               <p>
                 Caught out after closing? An after-hours haircut can be arranged.
                 Give the shop a ring on{" "}
@@ -340,25 +368,21 @@ export default function Home() {
             </figure>
 
             <div>
-              <h2 className="h2 reveal">About us</h2>
-              <p className="prose reveal" data-delay="1" style={{ marginTop: "1.5rem" }}>
+              <h2 className="h2">About us</h2>
+              <p className="prose prose--lead">
                 Leo&rsquo;s Barbers was opened in April 2022, run by two brothers,{" "}
                 <strong>Ed &amp; K</strong>. They began their barbering journey in
                 Shoreditch, London at the Hair for Men academy, learning alongside
                 highly skilled barbers who taught them the fundamentals of the trade.
               </p>
-              <p className="prose reveal" data-delay="2">
+              <p className="prose">
                 Since then they have set a high standard, kept up with modern styles
                 and delivered quality haircuts.
               </p>
 
-              <div className="brothers reveal" data-delay="3">
-                <span>
-                  <b>Ed</b> Barber &amp; co-owner
-                </span>
-                <span>
-                  <b>K</b> Barber &amp; co-owner
-                </span>
+              <div className="brothers">
+                <Plate name="Ed" spec="Barber &amp; co-owner" />
+                <Plate name="K" spec="Barber &amp; co-owner" />
               </div>
             </div>
           </div>
@@ -391,16 +415,12 @@ export default function Home() {
                       sizes="(max-width: 560px) 46vw, (max-width: 1080px) 30vw, 280px"
                     />
                   </div>
-                  <div className="plate">
-                    <h3>{product.name}</h3>
-                    <div className="plate__rule" />
-                    <p>{product.spec}</p>
-                  </div>
+                  <Plate as="h3" name={product.name} spec={product.spec} />
                 </article>
               ))}
             </div>
 
-            <p className="range__note reveal">
+            <p className="range__note">
               Available in the shop. Ask Ed or K on your next visit.
             </p>
           </div>
@@ -421,21 +441,14 @@ export default function Home() {
             </div>
 
             <div className="reviews__grid">
-              {REVIEWS.map((review, i) => (
-                <blockquote
-                  className="review reveal"
-                  key={review.name + review.service}
-                  data-delay={String(Math.min(i, 4))}
-                >
+              {REVIEWS.map((review) => (
+                <blockquote className="qrow" key={review.name + review.service}>
                   <p>&ldquo;{review.quote}&rdquo;</p>
-                  <footer>
-                    <cite>{review.name}</cite>
-                    <span>
-                      {review.service}
-                      <br />
-                      {review.date}
-                    </span>
-                  </footer>
+                  <Plate
+                    as="footer"
+                    name={<cite>{review.name}</cite>}
+                    spec={`${review.service} · ${review.date}`}
+                  />
                 </blockquote>
               ))}
             </div>
@@ -450,7 +463,7 @@ export default function Home() {
             </div>
 
             <div className="find__grid">
-              <div className="reveal">
+              <div>
                 <address className="address">
                   <b>Leo&rsquo;s Barbers</b>
                   <br />
@@ -481,11 +494,14 @@ export default function Home() {
 
                 <HoursTable />
 
-                <ul className="amenities" aria-label="Amenities">
-                  {AMENITIES.map((a) => (
-                    <li key={a}>{a}</li>
-                  ))}
-                </ul>
+                <div className="amenities">
+                  <Plate name="In the shop" spec="Listed on Booksy" />
+                  <ul>
+                    {AMENITIES.map((a) => (
+                      <li key={a}>{a}</li>
+                    ))}
+                  </ul>
+                </div>
               </div>
 
               <div className="map reveal">

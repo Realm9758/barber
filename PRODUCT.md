@@ -76,10 +76,13 @@ The previous build listed three services that **do not exist on Booksy** and hav
 removed: "Skin fade / taper" £26, "Skin fade / taper & beard" £36, and "Kids skin fade" £20.
 Skin fades and tapers are done, but they are booked as the haircut services above.
 
-### Opening hours, carried from the previous build, NOT re-confirmed
+### Opening hours, VERIFIED against the live Booksy page on 2026-08-06
 
-Mon closed · Tue–Wed 9:00–18:00 · Thu 11:00–20:00 · Fri 9:00–18:00 ·
-Sat 8:00–12:00 and 12:30–16:30 · Sun closed. After-hours cuts by arrangement, by phone.
+Mon closed · Tue 09:00–18:00 · Wed 09:00–18:00 · Thu 11:00–20:00 · Fri 09:00–18:00 ·
+Sat 08:00–12:00 and 12:30–16:30 · Sun closed.
+
+After-hours haircuts are arranged by phone (a hidden "After hours haircut (call shop)"
+service exists on Booksy and appears on a confirmed review).
 
 ## Brand Commitments
 
