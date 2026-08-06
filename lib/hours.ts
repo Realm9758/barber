@@ -19,14 +19,12 @@ export const WEEK: Day[] = [
   { key: "wed", label: "Wed", long: "Wednesday", windows: [{ open: hm(9), close: hm(18) }] },
   { key: "thu", label: "Thu", long: "Thursday", windows: [{ open: hm(11), close: hm(20) }] },
   { key: "fri", label: "Fri", long: "Friday", windows: [{ open: hm(9), close: hm(18) }] },
+  /* Shown as one continuous day at the shop's request (2026-08-06). */
   {
     key: "sat",
     label: "Sat",
     long: "Saturday",
-    windows: [
-      { open: hm(8), close: hm(12) },
-      { open: hm(12, 30), close: hm(16, 30) },
-    ],
+    windows: [{ open: hm(8), close: hm(16, 30) }],
   },
 ];
 

@@ -81,6 +81,9 @@ Skin fades and tapers are done, but they are booked as the haircut services abov
 Mon closed · Tue 09:00–18:00 · Wed 09:00–18:00 · Thu 11:00–20:00 · Fri 09:00–18:00 ·
 Sat 08:00–12:00 and 12:30–16:30 · Sun closed.
 
+**Client instruction 2026-08-06: display Saturday as one continuous 08:00–16:30 day**
+(Booksy still shows the lunch split; the shop asked for the simpler form on the site).
+
 After-hours haircuts are arranged by phone (a hidden "After hours haircut (call shop)"
 service exists on Booksy and appears on a confirmed review).
 
@@ -120,7 +123,13 @@ appear on Booksy; they have been removed. The previous build's "5.0 on Google" c
 not be verified (Google blocks automated fetches) and has been removed from the site.
 
 Amenities, verified on the Booksy profile: parking space, credit cards accepted, accessible
-for people with disabilities, child-friendly, pets allowed.
+for people with disabilities, child-friendly, pets allowed. The shop directly confirmed
+(2026-08-06) that the parking is **free** and the shop is **fully air conditioned**; both
+are client-supplied facts and appear on the site.
+
+Client copy edits 2026-08-06 (after seeing the first build): no "Two chairs", no "cut
+carefully" / "priced plainly", no description paragraph under Prices, and the fifth work
+photo replaced with `assets/source/IMG_9361.jpg` (served as `public/img/cut-06.jpg`).
 
 Absences future work must not fabricate: retail prices, staff names beyond Ed and K,
 qualifications or awards, years of experience figures, appointment-length or process copy,

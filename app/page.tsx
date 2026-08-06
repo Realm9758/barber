@@ -45,9 +45,11 @@ const PRICE_GROUPS = [
   },
 ];
 
-/* Amenity wording is Booksy's own, not paraphrased. */
+/* From the Booksy profile, plus free parking and air conditioning as
+   confirmed directly by the shop (2026-08-06). */
 const AMENITIES = [
-  "Parking space",
+  "Free parking",
+  "Fully air conditioned",
   "Credit cards accepted",
   "Accessible for people with disabilities",
   "Child friendly",
@@ -72,8 +74,8 @@ const GALLERY = [
     alt: "Bleached blonde curly crop over a high skin fade",
   },
   {
-    src: "/img/cut-05.jpg",
-    alt: "Tight natural curls kept full on top with a mid skin fade through the sides",
+    src: "/img/cut-06.jpg",
+    alt: "Side-swept textured crop with a clean low skin fade, against the shop's white subway tiles",
   },
 ];
 
@@ -186,8 +188,7 @@ export default function Home() {
               </h1>
               <p className="lede">
                 A barbershop on Cromwell Road in Ware, open since 2022. Skin fades,
-                tapers and beard work by Ed and K. Modern styles, cut carefully,
-                priced plainly.
+                tapers and beard work by Ed and K. Modern styles.
               </p>
 
               <div className="hero__actions" id="hero-cta">
@@ -231,11 +232,7 @@ export default function Home() {
                 priority
                 sizes="(max-width: 880px) 100vw, 46vw"
               />
-              <Plate
-                as="figcaption"
-                name="The shop floor"
-                spec="Est. April 2022 · Two chairs"
-              />
+              <Plate as="figcaption" name="The shop floor" spec="Est. April 2022" />
             </figure>
           </div>
         </section>
@@ -245,10 +242,6 @@ export default function Home() {
           <div className="wrap">
             <div className="section__head">
               <h2 className="h2">Prices</h2>
-              <p>
-                Every service the shop books, what it costs and how long to
-                allow. Pay in the shop, cards accepted.
-              </p>
             </div>
 
             <div className="prices__grid">
