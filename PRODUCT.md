@@ -130,6 +130,9 @@ are client-supplied facts and appear on the site.
 Client copy edits 2026-08-06 (after seeing the first build): no "Two chairs", no "cut
 carefully" / "priced plainly", no description paragraph under Prices, and the fifth work
 photo replaced with `assets/source/IMG_9361.jpg` (served as `public/img/cut-06.jpg`).
+Follow-up the same day: the per-service duration notes ("30 min" etc.) removed from the
+price list display too; the durations stay on record in the services table above. The
+"Under 16" and "Without shape up" qualifiers stay, as they are conditions, not durations.
 
 Absences future work must not fabricate: retail prices, staff names beyond Ed and K,
 qualifications or awards, years of experience figures, appointment-length or process copy,

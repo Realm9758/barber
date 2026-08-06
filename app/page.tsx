@@ -19,28 +19,33 @@ import {
    live Booksy page on 2026-08-06.
    ------------------------------------------------------------------------- */
 
-const PRICE_GROUPS = [
+/* Durations removed from display at the shop's request (2026-08-06);
+   they remain on record in PRODUCT.md. `note` is for real qualifiers only. */
+const PRICE_GROUPS: {
+  title: string;
+  items: { name: string; note?: string; price: string }[];
+}[] = [
   {
     title: "Cuts",
     items: [
-      { name: "Haircut & style", note: "30 min", price: "£26" },
-      { name: "Haircut & beard trim", note: "45 min", price: "£36" },
-      { name: "Buzz cut, one grade", note: "15 min", price: "£15" },
-      { name: "Buzz cut, two grades", note: "20 min", price: "£20" },
+      { name: "Haircut & style", price: "£26" },
+      { name: "Haircut & beard trim", price: "£36" },
+      { name: "Buzz cut, one grade", price: "£15" },
+      { name: "Buzz cut, two grades", price: "£20" },
     ],
   },
   {
     title: "Beards",
     items: [
-      { name: "Beard trim & shape up", note: "20 min", price: "£15" },
-      { name: "Beard shave only", note: "5 min, without shape up", price: "£5" },
+      { name: "Beard trim & shape up", price: "£15" },
+      { name: "Beard shave only", note: "Without shape up", price: "£5" },
     ],
   },
   {
     title: "Juniors & seniors",
     items: [
-      { name: "Kids haircut & style", note: "Under 16, 30 min", price: "£20" },
-      { name: "OAP haircut", note: "25 min", price: "£18" },
+      { name: "Kids haircut & style", note: "Under 16", price: "£20" },
+      { name: "OAP haircut", price: "£18" },
     ],
   },
 ];
@@ -250,10 +255,10 @@ export default function Home() {
                   <Plate as="h3" name={PRICE_GROUPS[0].title} spec="4 services" />
                   <dl>
                     {PRICE_GROUPS[0].items.map((item) => (
-                      <div className="prow" key={item.name + item.note}>
+                      <div className="prow" key={item.name}>
                         <dt>
                           {item.name}
-                          <span>{item.note}</span>
+                          {item.note && <span>{item.note}</span>}
                         </dt>
                         <dd>{item.price}</dd>
                       </div>
@@ -272,10 +277,10 @@ export default function Home() {
                     />
                     <dl>
                       {group.items.map((item) => (
-                        <div className="prow" key={item.name + item.note}>
+                        <div className="prow" key={item.name}>
                           <dt>
                             {item.name}
-                            <span>{item.note}</span>
+                            {item.note && <span>{item.note}</span>}
                           </dt>
                           <dd>{item.price}</dd>
                         </div>
