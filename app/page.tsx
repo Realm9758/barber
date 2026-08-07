@@ -82,6 +82,10 @@ const GALLERY = [
     src: "/img/cut-06.jpg",
     alt: "Side-swept textured crop with a clean low skin fade, against the shop's white subway tiles",
   },
+  {
+    src: "/img/cut-07.jpg",
+    alt: "Messy textured crop on top with a sharp low drop fade, cut by K",
+  },
 ];
 
 /* Names and spec lines below are exactly what is printed on the packaging. */
@@ -343,7 +347,7 @@ export default function Home() {
                     width={1160}
                     height={1450}
                     loading="lazy"
-                    sizes="(max-width: 560px) 46vw, (max-width: 1080px) 30vw, 220px"
+                    sizes="(max-width: 699px) 50vw, 33vw"
                   />
                 </figure>
               ))}
