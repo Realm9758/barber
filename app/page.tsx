@@ -83,8 +83,8 @@ const GALLERY = [
     alt: "Side-swept textured crop with a clean low skin fade, against the shop's white subway tiles",
   },
   {
-    src: "/img/cut-07.jpg",
-    alt: "Messy textured crop on top with a sharp low drop fade, cut by K",
+    src: "/img/cut-08.jpg",
+    alt: "Back view of a textured crop with a clean taper fade at the neckline, against the shop's white subway tiles",
   },
 ];
 
