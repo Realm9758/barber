@@ -5,6 +5,7 @@ import SiteNav from "@/components/SiteNav";
 import Icon, { Stars } from "@/components/Icon";
 import {
   ADDRESS,
+  AREAS,
   BOOKSY,
   DIRECTIONS,
   INSTAGRAM,
@@ -12,43 +13,14 @@ import {
   PHONE,
   PHONE_DISPLAY,
 } from "@/lib/shop";
+import { PRICE_GROUPS } from "@/lib/services";
+import { FAQS } from "@/lib/faq";
 
 /* -------------------------------------------------------------------------
    Content. Everything a non-designer would want to change lives right here.
    Prices, durations, reviews and amenities were checked against the shop's
    live Booksy page on 2026-08-06.
    ------------------------------------------------------------------------- */
-
-/* Durations removed from display at the shop's request (2026-08-06);
-   they remain on record in PRODUCT.md. `note` is for real qualifiers only. */
-const PRICE_GROUPS: {
-  title: string;
-  items: { name: string; note?: string; price: string }[];
-}[] = [
-  {
-    title: "Cuts",
-    items: [
-      { name: "Haircut & style", price: "£26" },
-      { name: "Haircut & beard trim", price: "£36" },
-      { name: "Buzz cut, one grade", price: "£15" },
-      { name: "Buzz cut, two grades", price: "£20" },
-    ],
-  },
-  {
-    title: "Beards",
-    items: [
-      { name: "Beard trim & shape up", price: "£15" },
-      { name: "Beard shave only", note: "Without shape up", price: "£5" },
-    ],
-  },
-  {
-    title: "Juniors & seniors",
-    items: [
-      { name: "Kids haircut & style", note: "Under 16", price: "£20" },
-      { name: "OAP haircut", price: "£18" },
-    ],
-  },
-];
 
 /* From the Booksy profile, plus free parking and air conditioning as
    confirmed directly by the shop (2026-08-06). */
@@ -191,6 +163,9 @@ export default function Home() {
           <div className="wrap hero__grid">
             <div>
               <h1 className="display">
+                <span className="display__eyebrow">
+                  Barbers in Ware, Hertfordshire
+                </span>
                 Two brothers.
                 <br />
                 One standard.
@@ -457,8 +432,29 @@ export default function Home() {
           </div>
         </section>
 
+        {/* ============================= FAQ ============================ */}
+        <section className="section" id="faq">
+          <div className="wrap">
+            <div className="section__head">
+              <h2 className="h2">Common questions</h2>
+              <p>
+                Where the shop is, what a cut costs and how to get in the chair.
+              </p>
+            </div>
+
+            <div className="faq__grid">
+              {FAQS.map((item) => (
+                <div className="faq__item" key={item.q}>
+                  <h3 className="faq__q">{item.q}</h3>
+                  <p className="faq__a">{item.a}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
         {/* =========================== FIND US ========================== */}
-        <section className="section" id="find">
+        <section className="section section--tint" id="find">
           <div className="wrap">
             <div className="section__head">
               <h2 className="h2">Find us</h2>
@@ -495,6 +491,11 @@ export default function Home() {
                 </div>
 
                 <HoursTable />
+
+                <div className="areas">
+                  <Plate name="Also serving" spec="Nearby in Hertfordshire" />
+                  <p>{AREAS.filter((a) => a !== "Ware").join(" · ")}</p>
+                </div>
 
                 <div className="amenities">
                   <Plate name="In the shop" spec="Listed on Booksy" />
